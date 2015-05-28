@@ -188,11 +188,30 @@ param srcflux
   apmvals entry {Absorption parameters} abs1.nH=0.0 {Sherpa model parameters}
 endparam
 
+param dl_obsid
+  dlobi entry {Chandra OBS_ID} {} {only public OBS_IDs are accessible}
+  dldir entry {Download directory} {./} {default will download to directory where ds9 was launched.}
+  dlview menu {Load evt2 file?} {yes|no}
+endparam  
+
+
 
 # ------------------------------------------------------
 
 
 hmenu CIAO
+
+  hmenu Archive
+
+    Download Chandra OBS_ID
+    *
+    menu
+    $param(dl_obsid); $env(ASCDS_CONTRIB)/bin/ds9_dl_obsid.sh $xpa $dlobi $dldir $dlview  | $text
+
+
+  endhmenu
+  
+  ---
 
   hmenu Statistics
 
