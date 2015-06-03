@@ -195,6 +195,12 @@ param dl_obsid
 endparam  
 
 
+param dl_csc
+  dlobi entry {Chandra OBS_ID} {} {only public OBS_IDs are accessible}
+  dldir entry {Download directory} {./} {default will download to directory where ds9 was launched.}
+  dlview menu {Load catalog?} {yes|no}
+endparam  
+
 
 # ------------------------------------------------------
 
@@ -208,6 +214,10 @@ hmenu CIAO
     menu
     $param(dl_obsid); $env(ASCDS_CONTRIB)/bin/ds9_dl_obsid.sh $xpa $dlobi $dldir $dlview  | $text
 
+    CSC By OBS_ID
+    *
+    menu
+    $param(dl_csc); $env(ASCDS_CONTRIB)/bin/ds9_dl_csc.sh $xpa $dlobi $dldir $dlview  | $text
 
   endhmenu
   
