@@ -34,9 +34,18 @@ fi
 
 xpaget $ds9 regions -format ciao | egrep -v "^#" | \
   egrep polygon > $ASCDS_WORK_PATH/$$_poly.reg
+
+np=`wc -l  $ASCDS_WORK_PATH/$$_poly.reg | awk '{print $1}'`
+if test "$np" -eq 0
+then
+  echo "# ---------------------"
+  echo "ERROR:  No polygon regions found"
+  exit 1
+fi
+
+
 dmmakereg region="region($ASCDS_WORK_PATH/$$_poly.reg)" \
   outfile=$ASCDS_WORK_PATH/$$_poly.fits ker=fits
-
 
 dmimgpick $ASCDS_WORK_PATH/$$_poly.fits"[cols x,y]" - - $meth | \
   dmlist - data,clean,array
