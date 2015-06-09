@@ -23,7 +23,7 @@ model=$2
 grpcts=$3
 elo=$4
 ehi=$5
-
+xtra="$6"
 
 nxpa=`xpaaccess -n ${ds9}`
 if test $nxpa -ne 1
@@ -110,7 +110,7 @@ sav=$ASCDS_WORK_PATH/ds9specfit.${USER}/${root}/sav
 cmd=$ASCDS_WORK_PATH/ds9specfit.${USER}/${root}/cmd
 
 redo=0
-for d in $rmf $arf $spi $bpi
+for d in $rmf $arf $spi
 do
   if test -e $d
   then
@@ -190,6 +190,13 @@ echo "$root ${file} ${src} ${bkg}" >> $ASCDS_WORK_PATH/ds9specfit.${USER}/invent
 echo "${file} ${src} ${bkg}" >> $ASCDS_WORK_PATH/ds9specfit.${USER}/${root}/info.txt
 
 
+if test x"${xtra}" = x
+then
+  extra=""
+else
+  extra="exec(${xtra})"
+fi
+
 echo " (4/4) Fitting spectrum"
 
 
@@ -203,7 +210,7 @@ notice(${elo},${ehi})
 $subtract
 set_source("${model}.mdl1 * xswabs.abs1")
 abs1.nH = $nH
-
+$extra
 
 try:
   fit()
