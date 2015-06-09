@@ -1,0 +1,127 @@
+#! /usr/bin/env python
+
+#
+# Copyright (C) 2014 Smithsonian Astrophysical Observatory
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+import sys
+import os
+os.environ["TERM"] = "linux"  # Hack to keep readline from emitting ctrl chars
+
+
+def parse_infile( infile ):
+    """
+    Minimal parsing of ds9/funtools file names
+    """
+    tab=infile.replace("[EVENTS,","[EVENTS][")
+    tab=tab.replace("[EVENTS]","")
+    return tab
+
+
+def parse_regions( regs ):
+    """
+    
+    """
+    if regs.startswith("@"):
+        import stk as stk
+        reg_list = stk.build( regs )
+    else:
+        reg_list = regs.split(";")
+
+    c_and_e = filter( lambda x: x.split('(')[0].lower() in ['circle', 'ellipse'], reg_list)
+
+    if len(c_and_e) != len(reg_list):
+        print("WARNING: Only circle and ellipse shapes can be used.  Some regions have been omitted.")
+
+    if len(c_and_e) == 0:
+        raise RuntimeError("ERROR: Only circle and ellipse shapes can be used.  None found.")
+        
+    return c_and_e
+    
+
+def get_vals( infile ):
+    from pycrates import read_file
+    
+    tab = read_file(infile)
+    cols = tab.get_colnames()
+    
+    vals = {}
+    for c in cols:
+        vals[c] = tab.get_column(c).values[0]
+
+    return vals
+
+
+def pretty_print( regs, vals ):
+    """
+    """
+    
+    print ""
+    
+    labels = [ "Region", "X Center", "Y Center", "Major", "Minor", "Angle" ]
+    ids = [ "REGION", "X", "Y", "MJR_AXIS_RAW", "MNR_AXIS_RAW", "POS_ANGLE_RAW"]
+    lfmts = " ".join([ "{:30s}", "{:>10s}", "{:>10s}", "{:>7s}", "{:>7s}", "{:>6s}"])
+    vfmts = [ "{:30s}", "{:10.2f}", "{:10.2f}", "{:7.3f}", "{:7.3f}", "{:6.2f}"]
+
+    print lfmts.format( *labels )
+    for rr in regs:
+        out = map( lambda ii: vfmts[ii].format( vals[rr][ids[ii]]), range(len(ids)) )
+        print lfmts.format(*out)
+
+
+infile=parse_infile(sys.argv[1])
+regs = parse_regions( sys.argv[2] )
+
+from tempfile import NamedTemporaryFile
+from ciao_contrib.runtool import make_tool
+mom = make_tool("imgmoment")
+ext = make_tool("srcextent")
+mkreg = make_tool("dmmakereg")
+
+savevals = {}
+
+print "--------------------------"
+print "Infile: {}".format(infile)
+print ""
+
+for reg in regs:
+    mom.infile = "{}[(x,y)={}][bin x=::1,y=::1]".format(infile, reg)
+    mom()
+    
+    tmpreg = NamedTemporaryFile( dir=os.environ["ASCDS_WORK_PATH"], delete=False )
+    tmpout = NamedTemporaryFile( dir=os.environ["ASCDS_WORK_PATH"], delete=False )
+    try:
+        mkreg(region=reg, ker="fits", out=tmpreg.name, clobber=True, wcs=infile )
+        
+        print ext( srcfile=infile, outfile=tmpout.name, psffile="", regfile=tmpreg.name, 
+            shape="gaussian", 
+            x0=mom.x_mu, y0=mom.y_mu, srcsize=mom.xsig,
+            clobber=True)
+
+        vals = get_vals( tmpout.name )
+        vals["REGION"] = reg
+        savevals[reg] = vals
+
+    finally:
+        if os.path.exists( tmpreg.name):
+            os.unlink( tmpreg.name )
+        if os.path.exists( tmpout.name):
+            os.unlink( tmpout.name )
+
+pretty_print( regs, savevals )
+
+
