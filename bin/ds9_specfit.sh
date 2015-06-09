@@ -184,6 +184,11 @@ then
     exit 1
   fi
 
+  echo "Created spectrum $spi"
+
+else
+  echo "Using existing spectrum $spi"
+
 fi
 
 echo "$root ${file} ${src} ${bkg}" >> $ASCDS_WORK_PATH/ds9specfit.${USER}/inventory.lis
@@ -238,7 +243,7 @@ quit()
 EOF
 
 
-sherpa -b $cmd 2>&1 | grep -v "^read" | grep -v "grouping flags"
+sherpa -b $cmd 2>&1 ### | grep -v "^read" | grep -v "grouping flags"
 
 echo ""
 echo "To restore session, start sherpa and type"
