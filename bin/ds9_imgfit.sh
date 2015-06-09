@@ -85,10 +85,16 @@ echo "  (3/3) Doing fit"
 
 sherpa -b $ASCDS_WORK_PATH/$$_img.cmd
 
+xpaset -p $ds9 tile
 xpaset -p $ds9 frame new
 cat $ASCDS_WORK_PATH/$$_out.fits | xpaset $ds9 fits
+
+
+xpaset -p $ds9 frame new
+dmimgcalc $ASCDS_WORK_PATH/$$_img.fits $ASCDS_WORK_PATH/$$_out.fits $ASCDS_WORK_PATH/$$_resid.fits sub clob+ lookup=""
+cat $ASCDS_WORK_PATH/$$_resid.fits | xpaset $ds9 fits
 
 echo "Done!"
 
 
-/bin/rm -f  $ASCDS_WORK_PATH/$$_img.fits $ASCDS_WORK_PATH/$$_img.cmd $ASCDS_WORK_PATH/$$_out.fits
+/bin/rm -f  $ASCDS_WORK_PATH/$$_img.fits $ASCDS_WORK_PATH/$$_img.cmd $ASCDS_WORK_PATH/$$_out.fits $ASCDS_WORK_PATH/$$_resid.fits
