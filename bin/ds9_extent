@@ -70,17 +70,17 @@ def pretty_print( regs, vals ):
     """
     """
     
-    print ""
+    sys.stdout.write("\n")
     
     labels = [ "Region", "X Center", "Y Center", "Major", "Minor", "Angle" ]
     ids = [ "REGION", "X", "Y", "MJR_AXIS_RAW", "MNR_AXIS_RAW", "POS_ANGLE_RAW"]
-    lfmts = " ".join([ "{:30s}", "{:>10s}", "{:>10s}", "{:>7s}", "{:>7s}", "{:>6s}"])
-    vfmts = [ "{:30s}", "{:10.2f}", "{:10.2f}", "{:7.3f}", "{:7.3f}", "{:6.2f}"]
+    lfmts = " ".join([ "{:40s}", "{:>10s}", "{:>10s}", "{:>7s}", "{:>7s}", "{:>6s}"])
+    vfmts = [ "{:40s}", "{:10.2f}", "{:10.2f}", "{:7.3f}", "{:7.3f}", "{:6.2f}"]
 
-    print lfmts.format( *labels )
+    sys.stdout.write(lfmts.format( *labels )+"\n")
     for rr in regs:
         out = map( lambda ii: vfmts[ii].format( vals[rr][ids[ii]]), range(len(ids)) )
-        print lfmts.format(*out)
+        sys.stdout.write(lfmts.format(*out)+"\n")
 
 
 infile=parse_infile(sys.argv[1])
@@ -94,12 +94,16 @@ mkreg = make_tool("dmmakereg")
 
 savevals = {}
 
-print "--------------------------"
-print "Infile: {}".format(infile)
-print ""
+sys.stdout.write("--------------------------\n")
+sys.stdout.write("Infile: {}\n".format(infile))
+sys.stdout.write("\n")
 
 for reg in regs:
-    mom.infile = "{}[(x,y)={}][bin x=::1,y=::1]".format(infile, reg)
+
+    sys.stdout.write( "\nProcessing region {} of {}\n".format( regs.index(reg)+1, len(regs) ))
+    sys.stdout.flush()
+
+    mom.infile = "{}[(x,y)={}][bin x,y]".format(infile, reg)
     mom()
     
     tmpreg = NamedTemporaryFile( dir=os.environ["ASCDS_WORK_PATH"], delete=False )
@@ -107,10 +111,12 @@ for reg in regs:
     try:
         mkreg(region=reg, ker="fits", out=tmpreg.name, clobber=True, wcs=infile )
         
-        print ext( srcfile=infile, outfile=tmpout.name, psffile="", regfile=tmpreg.name, 
+        tool_out=ext( srcfile=infile, outfile=tmpout.name, psffile="", regfile=tmpreg.name, 
             shape="gaussian", 
             x0=mom.x_mu, y0=mom.y_mu, srcsize=mom.xsig,
             clobber=True)
+        tool_out.replace("Results for Source 1\n","")
+        sys.stdout.write(tool_out+"\n")
 
         vals = get_vals( tmpout.name )
         vals["REGION"] = reg

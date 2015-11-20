@@ -33,8 +33,8 @@ then
 fi
 
 
-xpaget $ds9 regions -format ds9 > $ASCDS_WORK_PATH/$$_all.reg
-grab=`xpaget $ds9 regions -format ds9 selected | tail -1 | cut -d# -f1`
+xpaget $ds9 regions -format ds9 -system physical > $ASCDS_WORK_PATH/$$_all.reg
+grab=`xpaget $ds9 regions -format ds9 selected -system physical | tail -1 | cut -d# -f1`
 old=`echo $grab | cut -d"(" -f2 | cut -d, -f1,2`
 
 dmstat "-[(x,y)=$grab]" cen+ sig- > /dev/null
