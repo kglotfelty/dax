@@ -1,6 +1,6 @@
 #! /bin/sh
 # 
-#  Copyright (C) 2004-2008  Smithsonian Astrophysical Observatory
+#  Copyright (C) 2004-2008,2015  Smithsonian Astrophysical Observatory
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -40,7 +40,7 @@ cal=`pget calquiz outfile | cut -d"[" -f1`
 
 if test x$cal = x
 then
-
+  echo "Missing necessary CALDB file"
   exit 1
 fi
 
@@ -48,8 +48,8 @@ fi
 if test `xpaget $ds9 mode` = crosshair
 then
 
-  x=`xpaget $ds9 crosshair | awk '{print $1}'`
-  y=`xpaget $ds9 crosshair | awk '{print $2}'`
+  x=`xpaget $ds9 crosshair -system physical -skyformat degrees | awk '{print $1}'`
+  y=`xpaget $ds9 crosshair -system physical -skyformat degrees | awk '{print $2}'`
 
 else
 
@@ -60,11 +60,13 @@ fi
 
 if test x$x = x
 then
+  echo "ERROR getting coordinates"
   exit 1
 fi
 
 if test x$y = x
 then
+  echo "ERROR getting coordinates"
   exit 1
 fi
 
@@ -81,7 +83,6 @@ phi=`pget dmcoords phi`
 ra=`pget dmcoords ra`
 dec=`pget dmcoords dec`
 
-#rad=`slsh -e 'require("psf");variable psf=psfInit("'${cal}'");()=printf("%g",psfSize(psf,'${eng},${theta},${phi},${frac}'));'` 
 
 
 rad=`cat <<EOF | $ASCDS_INSTALL/bin/python 

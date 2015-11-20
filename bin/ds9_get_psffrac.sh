@@ -1,6 +1,6 @@
 #! /bin/sh
 # 
-#  Copyright (C) 2004-2008  Smithsonian Astrophysical Observatory
+#  Copyright (C) 2004-2008,2015  Smithsonian Astrophysical Observatory
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -46,8 +46,7 @@ then
 fi
 
 
-myreg=`xpaget ${ds9} regions selected -system wcs -strip | tr ";" "\012" | egrep "circle|ellipse|box|annulus" | tail -1 | tr "(),"'"'  " " `
-
+myreg=`xpaget ${ds9} regions selected -system wcs -skyformat degrees -strip | tr ";" "\012" | egrep "circle|ellipse|box|annulus" | tail -1 | tr "(),"'"'  " " `
 
 
 if test "x$myreg" = x

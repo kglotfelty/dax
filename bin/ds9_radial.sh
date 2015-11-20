@@ -1,6 +1,6 @@
 #! /bin/sh
 # 
-#  Copyright (C) 2004-2008  Smithsonian Astrophysical Observatory
+#  Copyright (C) 2004-2008,2015  Smithsonian Astrophysical Observatory
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,7 @@ fi
 
 
 \rm -f $ASCDS_WORK_PATH/$$_ds9.reg
-xpaget $xpa regions | cut -d"#" -f1 | sed 's, *$,,' | \
+xpaget $xpa regions -format ds9 -coord physical | cut -d"#" -f1 | sed 's, *$,,' | \
   awk -f $ASCDS_CONTRIB/config/ds9_region_expand.awk > $ASCDS_WORK_PATH/$$_ds9.reg
 
 dmextract "${file}[bin sky=@$ASCDS_WORK_PATH/$$_ds9.reg]" - op=generic | \

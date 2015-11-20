@@ -1,6 +1,6 @@
 #! /bin/sh
 # 
-#  Copyright (C) 2004-2008  Smithsonian Astrophysical Observatory
+#  Copyright (C) 2004-2008,2015  Smithsonian Astrophysical Observatory
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@ fi
 
 
 
-xpaget $ds9 regions -format ciao | egrep -v "^#" | \
+xpaget $ds9 regions -format ciao -system physical | egrep -v "^#" | \
   egrep polygon > $ASCDS_WORK_PATH/$$_poly.reg
 
 np=`wc -l  $ASCDS_WORK_PATH/$$_poly.reg | awk '{print $1}'`

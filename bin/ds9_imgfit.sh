@@ -1,5 +1,23 @@
 #! /bin/sh
 
+# 
+#  Copyright (C) 2010-2015  Smithsonian Astrophysical Observatory
+#
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
 
 ds9=$1
 model=$2
@@ -19,7 +37,7 @@ fi
 
 
 
-src=`xpaget ${ds9} regions -format ciao source -strip -selected | tr -d ";"`
+src=`xpaget ${ds9} regions -format ciao -system physical source -strip -selected | tr -d ";"`
 
 if test "x${src}" = x
 then
@@ -85,16 +103,10 @@ echo "  (3/3) Doing fit"
 
 sherpa -b $ASCDS_WORK_PATH/$$_img.cmd
 
-xpaset -p $ds9 tile
 xpaset -p $ds9 frame new
 cat $ASCDS_WORK_PATH/$$_out.fits | xpaset $ds9 fits
-
-
-xpaset -p $ds9 frame new
-dmimgcalc $ASCDS_WORK_PATH/$$_img.fits $ASCDS_WORK_PATH/$$_out.fits $ASCDS_WORK_PATH/$$_resid.fits sub clob+ lookup=""
-cat $ASCDS_WORK_PATH/$$_resid.fits | xpaset $ds9 fits
 
 echo "Done!"
 
 
-/bin/rm -f  $ASCDS_WORK_PATH/$$_img.fits $ASCDS_WORK_PATH/$$_img.cmd $ASCDS_WORK_PATH/$$_out.fits $ASCDS_WORK_PATH/$$_resid.fits
+/bin/rm -f  $ASCDS_WORK_PATH/$$_img.fits $ASCDS_WORK_PATH/$$_img.cmd $ASCDS_WORK_PATH/$$_out.fits
