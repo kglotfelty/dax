@@ -760,7 +760,7 @@ hmenu CIAO
   CIAO Help
   *
   menu
-  ahelp dax | $text
+  ahelp -n 80 dax | $text
   
     
     
