@@ -210,6 +210,19 @@ hmenu CIAO
 
   hmenu Archive
 
+    Summarize Dataset
+    *
+    menu
+    $env(ASCDS_CONTRIB)/bin/qocat "$filename" | $text
+    
+    ---
+    
+    Chandra OCAT
+    *
+    menu
+    $env(ASCDS_CONTRIB)/bin/qocat "$entry(OBS_ID)" | $text
+    
+
     Download Chandra OBS_ID
     *
     menu
@@ -219,6 +232,7 @@ hmenu CIAO
     *
     menu
     $param(dl_csc); $env(ASCDS_CONTRIB)/bin/ds9_dl_csc.sh $xpa $dlobi $dldir $dlview  | $text
+
 
   endhmenu
   
