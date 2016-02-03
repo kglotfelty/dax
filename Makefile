@@ -9,7 +9,7 @@ all:
 	@mkdir -p $(ROOT)/bin $(ROOT)/config $(ROOT)/doc/xml
 	@$(CP_FV) bin/* $(ROOT)/bin/
 	@$(CP_FV) config/* $(ROOT)/config/
-	@$(CP_FV) doc/xml/* $(ROOT)/doc/xml/
+	@$(CP_FV) doc/xml/* $(ROOT)/share/doc/xml/
 
 install: all
 
