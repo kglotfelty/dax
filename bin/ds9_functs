@@ -105,7 +105,7 @@ def pretty_print( infile, srcstk, bkg, _infile ):
     from pycrates import read_file
     tab = read_file(infile)
     
-    cols = [ "COMPONENT","NET_COUNTS", "NET_ERR", "NET_RATE", "NET_ERR", "CEL_AREA", "CEL_BRI", "CEL_BRI_ERR"]
+    cols = [ "COMPONENT","NET_COUNTS", "NET_ERR", "NET_RATE", "NET_RATE_ERR", "CEL_AREA", "CEL_BRI", "CEL_BRI_ERR"]
     units = map( lambda x: getattr(tab.get_column(x), 'unit'), cols )
     vals=map(lambda x: getattr(tab.get_column(x), 'values'), cols )
 
