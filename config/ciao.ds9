@@ -80,7 +80,7 @@ endparam
 # aconvolve
 # ---------------
 param convolve
-  smker menu {Smoothing Kernel} gaus|tophat|box|mexhat|sinc|power|exp|beta|cone|pyramid|sphere
+  smker menu {Smoothing Kernel} gaus|tophat|box|mexhat|sinc|power|exp|beta|cone|pyramid|sphere|hanning|racos
   xxsig entry {x-width} 3 {X-size}
   zoobar entry {y-width} 3 {Y-size}
   speed menu {Convolution type} slide|fft

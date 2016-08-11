@@ -62,5 +62,11 @@ case $ker in
     sphere)
       cat - | aconvolve - - lib:${ker}"(2,$xx)" meth=$meth 
       ;;
+    hanning)
+      cat - | aconvolve - - lib:${ker}"(2,1,$xx)" meth=$meth 
+      ;;
+    racos)
+      cat - | aconvolve - - lib:${ker}"(2,1,$yy,$xx)" meth=$meth 
+      ;;
 esac
 
