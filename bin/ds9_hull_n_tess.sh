@@ -62,14 +62,14 @@ case $cmd in
        cat - | dmimghull -"${regions}" - tol=$min |  \
        dmmakereg region="region(-)" out=- ker=ascii | \
        sed s,blue,green, | \
-       xpaset $ds9 regions
+       xpaset $ds9 regions -format ds9
   ;;
 
   tess)
        cat - | dmimgtess -"${regions}" - minpix=$min edge=0 meth=tess |  \
        dmmakereg region="region(-)" out=- ker=ascii | \
        sed s,blue,green, | \
-       xpaset $ds9 regions
+       xpaset $ds9 regions -format ds9
 
   ;;
 
@@ -77,7 +77,7 @@ case $cmd in
        cat - | dmimgtess -"${regions}" - minpix=$min edge=0 meth=tri |  \
        dmmakereg region="region(-)" out=- ker=ascii | \
        sed s,blue,green, | \
-       xpaset $ds9 regions
+       xpaset $ds9 regions -format ds9
 
   ;;
 

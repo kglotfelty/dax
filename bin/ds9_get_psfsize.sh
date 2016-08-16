@@ -96,7 +96,7 @@ EOF
 
 
 
-echo 'fk5; circle '$ra $dec $rad'" # tag={psfsize} tag={frac='${frac}'} tag={eng='${eng}'}' | xpaset $ds9 regions
+echo 'fk5; circle '$ra $dec $rad'" # tag={psfsize} tag={frac='${frac}'} tag={eng='${eng}'}' | xpaset $ds9 regions -format ds9
 
 exit 0
 

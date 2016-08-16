@@ -56,7 +56,7 @@ fi
 
 cat - | dmellipse -"${regions}" - "$frac" shape=$shape | \
 dmmakereg region="region(-)" out=- ker=ascii | \
-xpaset $ds9 regions
+xpaset $ds9 regions -format ds9
 
 
 
