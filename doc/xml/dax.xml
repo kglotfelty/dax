@@ -132,6 +132,16 @@ source $ASCDS_INSTALL/contrib/config/chips_startup.tk
    </ADESC>
 
 
+<ADESC title="Change in the 4.8.4 (September 2016) release">
+<PARA>
+  Several tasks have been updated to ensure that the desired region
+  format is retrieved from ds9 instead of relying on the assumed 
+  defaults. 
+</PARA>
+
+</ADESC>
+
+
 
 <ADESC title="Changes in the 4.6.7 (November 2014) release">
 <PARA>
@@ -161,6 +171,6 @@ clear which task is being run.
       </PARA>
    </BUGS>
 
-   <LASTMODIFIED>December 2013</LASTMODIFIED>
+   <LASTMODIFIED>September 2016</LASTMODIFIED>
 </ENTRY>
 </cxchelptopics>
