@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # 
-#  Copyright (C) 2004-2011  Smithsonian Astrophysical Observatory
+#  Copyright (C) 2004-2011,2016  Smithsonian Astrophysical Observatory
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -57,7 +57,7 @@ def PollForDS9 (ds9XPA):
    # more thought
    p1 = subprocess.Popen (['xpaaccess', ds9XPA], stdout=subprocess.PIPE)
    access = False
-   output = p1.communicate ()[0]
+   output = p1.communicate ()[0].decode("ascii")
 
    # loop until either the file changes or ds9 closes
    while len (output) > 0 and output.rstrip() == 'yes':
@@ -69,7 +69,8 @@ def PollForDS9 (ds9XPA):
       # check ds9 still active
       p1 = subprocess.Popen (['xpaaccess', ds9XPA], stdout=subprocess.PIPE)
       access = False
-      output = p1.communicate ()[0]
+      output = p1.communicate ()[0].decode("ascii")
+
 
 def warning_msg( msg ) :
    sys.stderr.write( msg )
@@ -98,6 +99,7 @@ if __name__ == '__main__':
    else:
       ds9XPA = sys.argv[1]
 
+
    if ( pkg_flag == pkgIsLoad ) :
       # start chips and connect to it and wait for ds9 to close 
       StartChips (ds9XPA)
@@ -105,3 +107,6 @@ if __name__ == '__main__':
          PollForDS9 (ds9XPA)
       except KeyboardInterrupt:
          pass
+      except Exception as ee:
+         print(str(ee))
+          
