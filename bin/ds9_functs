@@ -45,17 +45,17 @@ def parse_src( srcreg ):
     shapes = srcreg.split(";")
 
     # separate into include and exclude
-    xcld = filter( lambda x: x.startswith("-"), shapes )
-    incl = filter( lambda x: not x.startswith("-"), shapes )
+    xcld = list(filter( lambda x: x.startswith("-"), shapes ))
+    incl = list(filter( lambda x: not x.startswith("-"), shapes ))
 
     src = [ incl[0]+"".join(xcld) ]
-    for ii in xrange( 1,len(incl)):
+    for ii in range( 1,len(incl)):
         # We remove any previous srcs from current src
         src.append( "{}-{}".format(incl[ii], src[ii-1] ))
 
     src = [ i+"\n" for i in src]
 
-    srcstk = NamedTemporaryFile( dir=os.environ["ASCDS_WORK_PATH"], delete=False )
+    srcstk = NamedTemporaryFile( dir=os.environ["ASCDS_WORK_PATH"], mode="w", delete=False )
     srcstk.writelines( src )
     srcstk.close()
     return srcstk.name
@@ -70,8 +70,8 @@ def parse_bkg( bkgreg ):
     shapes = bkgreg.split(";")
 
     # separate into include and exclude
-    xcld = filter( lambda x: x.startswith("-"), shapes )
-    incl = filter( lambda x: not x.startswith("-"), shapes )
+    xcld = list(filter( lambda x: x.startswith("-"), shapes ))
+    incl = list(filter( lambda x: not x.startswith("-"), shapes ))
     
     xcld = "".join(xcld)
     bkg = [ "{}{}".format(i,xcld) for i in incl ]
@@ -98,9 +98,9 @@ def pretty_print( infile, srcstk, bkg, _infile ):
             
 
     def get_units_and_rows(cols):
-        units = map( lambda x: getattr(tab.get_column(x), 'unit'), cols )
-        vals=map(lambda x: getattr(tab.get_column(x), 'values'), cols )
-        rows=zip(*vals)
+        units = list(map( lambda x: getattr(tab.get_column(x), 'unit'), cols ))
+        vals=list(map(lambda x: getattr(tab.get_column(x), 'values'), cols ))
+        rows=list(zip(*vals))
         return units,rows
 
 
@@ -109,8 +109,8 @@ def pretty_print( infile, srcstk, bkg, _infile ):
     
     _cols = [ "COMPONENT","NET_COUNTS", "NET_ERR", "NET_RATE", "NET_RATE_ERR", "CEL_AREA", "CEL_BRI", "CEL_BRI_ERR"]
     cols = [x for x in _cols if tab.column_exists(x)]
-    units = map( lambda x: getattr(tab.get_column(x), 'unit'), cols )
-    vals=map(lambda x: getattr(tab.get_column(x), 'values'), cols )
+    units = list(map( lambda x: getattr(tab.get_column(x), 'unit'), cols ))
+    vals= list(map(lambda x: getattr(tab.get_column(x), 'values'), cols ))
 
     if bkg:
         sa = tab.get_column("area").values
@@ -125,7 +125,7 @@ def pretty_print( infile, srcstk, bkg, _infile ):
         units.extend( [bunits, bunits])
         vals.extend( [bkg_cts, bkg_err])
 
-    rows=zip(*vals)
+    rows=list(zip(*vals))
     
     from datetime import datetime
     
