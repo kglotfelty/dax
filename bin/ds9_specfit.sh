@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  Copyright (C) 2013,2015  Smithsonian Astrophysical Observatory
+#  Copyright (C) 2013,2015,2016  Smithsonian Astrophysical Observatory
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -97,7 +97,7 @@ fi
 #
 checksum=`dmkeypar "${file}" checksum echo+`
 
-root=`echo "${file} $checksum ${src} ${bkg}" | python -c 'import hashlib;import sys;print hashlib.md5(sys.stdin.readline()).hexdigest()' `
+root=`echo "${file} $checksum ${src} ${bkg}" | python -c 'import hashlib;import sys;print(hashlib.md5(sys.stdin.readline().encode("ascii")).hexdigest())' `
 
 
 mkdir -p $ASCDS_WORK_PATH/ds9specfit.${USER}/${root}/param
