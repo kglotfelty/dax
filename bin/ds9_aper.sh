@@ -6,7 +6,7 @@ mdl="$3"
 mdlp="$4"
 amdl="$5"
 amdlp="$6"
-
+psfmethod="$7"
 
 nxpa=`xpaaccess -n ${ds9}`
 if test $nxpa -ne 1
@@ -19,8 +19,8 @@ fi
 
 
 
-src=`xpaget ${ds9} regions -format ciao source -strip -selected | tr ";" "+" | sed 's,\+$,,;s,\+\-,\-,g' `
-bkg=`xpaget ${ds9} regions -format ciao background -strip -selected | tr ";" "+" | sed 's,\+$,,;s,\+\-,\-,g'` 
+src=`xpaget ${ds9} regions -format ciao source -strip yes selected | tr ";" "+" | sed 's,\+$,,;s,\+\-,\-,g' `
+bkg=`xpaget ${ds9} regions -format ciao background -strip yes selected | tr ";" "+" | sed 's,\+$,,;s,\+\-,\-,g'` 
 
 
 fmt=`xpaget ${ds9} fits type`
@@ -90,7 +90,7 @@ srcflux infile="${file}" \
   bkgresp=no \
   srcreg="${src}" \
   bkgreg="${bkg}" \
-  psfmethod="arfcorr" \
+  psfmethod="${psfmethod}" \
   clobber=yes \
   tmpdir=${rdir} 2>&1
 

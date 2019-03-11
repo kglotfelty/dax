@@ -187,6 +187,7 @@ param srcflux
   pmvals entry {Model parameters} "pow1.PhoIndex=2.0" {Sherpa model parameters}
   absmodel entry {Absorption model} "xsphabs.abs1" {Sherpa model expression}
   apmvals entry {Absorption parameters} abs1.nH=0.0 {Sherpa model parameters}
+  psfmethod menu {PSF Method} arfcorr|ideal|quick|marx {How to account for PSF fraction}
 endparam
 
 param dl_obsid
@@ -208,35 +209,34 @@ endparam
 
 hmenu CIAO
 
-  hmenu Archive
-
-    Summarize Dataset
-    *
-    menu
-    $env(ASCDS_CONTRIB)/bin/qocat "$filename" | $text
-    
-    ---
-    
-    Chandra OCAT
-    *
-    menu
-    $env(ASCDS_CONTRIB)/bin/qocat "$entry(OBS_ID)" | $text
-    
-
-    Download Chandra OBS_ID
-    *
-    menu
-    $param(dl_obsid); $env(ASCDS_CONTRIB)/bin/ds9_dl_obsid.sh $xpa $dlobi $dldir $dlview  | $text
-
-    CSC By OBS_ID
-    *
-    menu
-    $param(dl_csc); $env(ASCDS_CONTRIB)/bin/ds9_dl_csc.sh $xpa $dlobi $dldir $dlview  | $text
-
-
-  endhmenu
-  
-  ---
+###  hmenu Archive
+###
+###    Summarize Dataset
+###    *
+###    menu
+###    $env(ASCDS_CONTRIB)/bin/qocat "$filename" | $text
+###    
+###    ---
+###    
+###    Chandra OCAT
+###    *
+###    menu
+###    $env(ASCDS_CONTRIB)/bin/qocat "$entry(OBS_ID)" | $text
+###    
+###
+###    Download Chandra OBS_ID
+###    *
+###    menu
+###    $param(dl_obsid); $env(ASCDS_CONTRIB)/bin/ds9_dl_obsid.sh $xpa $dlobi $dldir $dlview  | $text
+###
+###    CSC By OBS_ID
+###    *
+###    menu
+###    $param(dl_csc); $env(ASCDS_CONTRIB)/bin/ds9_dl_csc.sh $xpa $dlobi $dldir $dlview  | $text
+###
+###
+###  endhmenu  
+###  ---
 
   hmenu Statistics
 
@@ -248,7 +248,7 @@ hmenu CIAO
     Photometry (srcflux)
     *EVT* *evt*
     menu
-    $param(srcflux); $env(ASCDS_CONTRIB)/bin/ds9_aper.sh $xpa "$energy" "$model" "$pmvals" "$absmodel" "$apmvals"| $text
+    $param(srcflux); $env(ASCDS_CONTRIB)/bin/ds9_aper.sh $xpa "$energy" "$model" "$pmvals" "$absmodel" "$apmvals" "$psfmethod" | $text
 
     ---
 
@@ -641,10 +641,10 @@ hmenu CIAO
     menu
     $param(imagefit); $env(ASCDS_CONTRIB)/bin/ds9_imgfit.sh $xpa $imgmodel $bkgmodel $getconf |& $text
 
-    Source Extent
-    *
-    menu
-    $env(ASCDS_CONTRIB)/bin/ds9_extent "$filename" "$regions(ciao,strip)" |& $text
+#NEW#    Source Extent
+#NEW#    *
+#NEW#    menu
+#NEW#    $env(ASCDS_CONTRIB)/bin/ds9_extent "$filename" "$regions(ciao,strip)" |& $text
 
 
   endhmenu
